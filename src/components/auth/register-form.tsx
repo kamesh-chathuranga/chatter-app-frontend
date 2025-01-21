@@ -4,7 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RegisterSchema } from "../../schema";
-import { login } from "@/actions/login";
+import { register } from "@/actions/register";
 
 import CardWrapper from "./card-wrapper";
 import {
@@ -39,7 +39,7 @@ const RegisterForm = () => {
     setSuccess("");
 
     startTransition(async () => {
-      const data = await login(formData);
+      const data = await register(formData);
       if ("error" in data) {
         setError(data.error);
       } else {
