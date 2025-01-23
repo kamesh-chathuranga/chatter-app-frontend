@@ -8,7 +8,8 @@ import {
 import SideBar from "./side-bar";
 import SearchBar from "./search-bar";
 import ChatTopBar from "./chat-top-bar";
-import Chat from "./chat/chat";
+import ChatList from "./chat/chat-list";
+import RightSidePanel from "./chat/right-side-panel";
 
 const ChatPane = () => {
   return (
@@ -22,14 +23,12 @@ const ChatPane = () => {
               <ChatTopBar />
               <SearchBar />
             </div>
-            <div></div>
+            <ChatList />
           </div>
         </ResizablePanel>
         <ResizableHandle className="w-1" />
         <ResizablePanel defaultSize={75} minSize={50}>
-          <div className="flex ">
-            <Chat />
-          </div>
+          <RightSidePanel />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
