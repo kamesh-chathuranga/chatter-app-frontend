@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getAllUsers } from "@/actions/users";
+import { getAllUsers } from "@/actions/user";
 import { useStore } from "@/store/store";
 import axios from "axios";
 

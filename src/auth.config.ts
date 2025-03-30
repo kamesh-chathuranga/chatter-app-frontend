@@ -1,9 +1,20 @@
-import type { NextAuthConfig } from "next-auth";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { CredentialsSignin, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { LoginSchema } from "./schema";
-import { getUserByEmail } from "./data/user";
 import bcryptjs from "bcryptjs";
+import { getCurrentUserByEmail } from "./actions/user";
+import { ZodError } from "zod";
+
+class CustomError extends CredentialsSignin {
+  constructor(code: string) {
+    super();
+    this.code = code;
+    this.message = code;
+    this.stack = undefined;
+  }
+}
 
 export default {
   providers: [
@@ -13,20 +24,36 @@ export default {
     }),
     Credentials({
       async authorize(credentials) {
-        const validateField = LoginSchema.safeParse(credentials);
+        let user;
+        let password: string = "";
 
-        if (validateField.success) {
-          const { email, password } = validateField.data;
-          const user = await getUserByEmail(email);
+        try {
+          const validateField = LoginSchema.safeParse(credentials);
 
-          if (!user || !user.password) return null;
+          if (validateField.success) {
+            const { email, password: parsedPassword } = validateField.data;
+            password = parsedPassword;
 
-          const passwordMatch = await bcryptjs.compare(password, user.password);
-
-          if (passwordMatch) return user;
+            user = await getCurrentUserByEmail(email);
+          }
+        } catch (error: any) {
+          if (error instanceof ZodError) {
+            throw new CustomError("Invalid schema");
+          }
+          throw new CustomError(error.message);
         }
 
-        return null;
+        if (!user || !user.password) {
+          throw new CustomError("Invalid credentials");
+        }
+
+        const passwordMatch = await bcryptjs.compare(password, user.password);
+
+        if (!passwordMatch) {
+          throw new CustomError("Invalid credentials");
+        }
+
+        return user;
       },
     }),
   ],

@@ -1,8 +1,15 @@
 export interface User {
   id: string;
-  name: string | null;
-  email: string | null;
-  image: string | null;
+  name: string;
+  email: string;
+  password?: string;
+  emailVerified?: Date;
+  image?: string;
+  about?: string;
+  phone?: string;
+  lastSeen?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Message {
@@ -16,4 +23,10 @@ export interface Message {
   status: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface ServerActionResponse {
+  status: number;
+  success: boolean;
+  message: string;
 }

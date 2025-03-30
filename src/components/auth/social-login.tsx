@@ -1,9 +1,8 @@
 import React from "react";
-
 import { signIn } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc";
 
 import { Button } from "../ui/button";
-import { FcGoogle } from "react-icons/fc";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 const SocialLogin = () => {

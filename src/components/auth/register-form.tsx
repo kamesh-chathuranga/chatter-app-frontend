@@ -1,10 +1,8 @@
-import React, { useTransition } from "react";
-
+import React from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RegisterSchema } from "../../schema";
-import { register } from "@/actions/register";
 
 import CardWrapper from "./card-wrapper";
 import {
@@ -18,12 +16,12 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import FormError from "../form-error";
-import FormSuccess from "../form-success";
+import { loginCurrentUser, registerUser } from "@/actions/auth";
+import { ServerActionResponse } from "@/types/types";
+import { Loader } from "lucide-react";
 
 const RegisterForm = () => {
   const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -34,18 +32,19 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (formData: z.infer<typeof RegisterSchema>) => {
+  const onSubmit = async (formData: z.infer<typeof RegisterSchema>) => {
     setError("");
-    setSuccess("");
+    const response: ServerActionResponse = await registerUser(formData);
 
-    startTransition(async () => {
-      const data = await register(formData);
-      if ("error" in data) {
-        setError(data.error);
-      } else {
-        setSuccess(data.success);
-      }
-    });
+    if (response?.status === 200 && response?.success) {
+      const formValues = {
+        email: formData.email,
+        password: formData.password,
+      };
+      await loginCurrentUser(formValues);
+    } else {
+      setError(response?.message);
+    }
   };
 
   return (
@@ -67,7 +66,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={form.formState.isSubmitting}
                       placeholder="Jennifer Doe"
                       type="text"
                     />
@@ -86,7 +85,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={form.formState.isSubmitting}
                       placeholder="chatter@example.com"
                       type="email"
                     />
@@ -105,7 +104,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={form.formState.isSubmitting}
                       placeholder="******"
                       type="password"
                     />
@@ -116,9 +115,16 @@ const RegisterForm = () => {
             />
           </div>
           <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button type="submit" className="w-full" disabled={isPending}>
-            Create an Account
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader color="white" className="animate-spin" size={24} />
+            ) : (
+              "Create an Account"
+            )}
           </Button>
         </form>
       </Form>
