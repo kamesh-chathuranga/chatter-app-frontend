@@ -8,53 +8,52 @@ import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getAllUsers } from "@/actions/user";
-import { useStore } from "@/store/store";
-import axios from "axios";
 
 const ChatTopBar = () => {
-  const {
-    setContactList,
-    contactList,
-    setCurrentChat,
-    currentUser,
-    currentChat,
-    setMessages,
-  } = useStore();
+  // const {
+  //   setContactList,
+  //   contactList,
+  //   setCurrentChat,
+  //   currentUser,
+  //   currentChat,
+  //   setMessages,
+  // } = useStore();
 
-  useEffect(() => {
-    const getContactList = async () => {
-      const users = await getAllUsers();
-      const filteredUsers = users.filter((user) => user.id !== currentUser?.id);
-      setContactList(filteredUsers);
-    };
+  // useEffect(() => {
+  //   const getContactList = async () => {
+  //     const users = await getAllUsers();
+  //     const filteredUsers: User[] = users.filter(
+  //       (user) => user.id !== currentUser?.id
+  //     );
+  //     setContactList(filteredUsers);
+  //   };
 
-    getContactList();
-  }, [setContactList, currentUser]);
+  //   getContactList();
+  // }, [setContactList, currentUser]);
 
-  useEffect(() => {
-    const getAllUserMessages = async () => {
-      try {
-        const { data: messages } = await axios.get(
-          `http://localhost:7000/api/message/all/${currentUser?.id}/${currentChat?.id}`
-        );
+  // useEffect(() => {
+  //   const getAllUserMessages = async () => {
+  //     try {
+  //       const { data: messages } = await axios.get(
+  //         `http://localhost:7000/api/message/all/${currentUser?.id}/${currentChat?.id}`
+  //       );
 
-        console.log(messages);
-        setMessages(messages);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       console.log(messages);
+  //       setMessages(messages);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    if (currentChat?.id && currentUser?.id) {
-      getAllUserMessages();
-    }
-  }, [currentChat, currentUser, setMessages]);
+  //   if (currentChat?.id && currentUser?.id) {
+  //     getAllUserMessages();
+  //   }
+  // }, [currentChat, currentUser, setMessages]);
 
   return (
     <div className="flex items-center justify-between w-full">
@@ -71,7 +70,7 @@ const ChatTopBar = () => {
             <DropdownMenuLabel className="text-2xl">New Chat</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            {contactList.map((contact) => {
+            {/* {contactList.map((contact) => {
               return (
                 <DropdownMenuItem
                   key={contact.id}
@@ -80,7 +79,7 @@ const ChatTopBar = () => {
                   {contact.name}
                 </DropdownMenuItem>
               );
-            })}
+            })} */}
           </DropdownMenuContent>
         </DropdownMenu>
         <Button variant="ghost">

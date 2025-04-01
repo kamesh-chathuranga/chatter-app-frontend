@@ -1,24 +1,27 @@
-'use client';
+"use client";
 
-import { useStore } from "@/store/store";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { getCurrentUserById } from "@/actions/user";
+import { User } from "@prisma/client";
+import { Session } from "next-auth";
+import { useStore } from "@/store";
 
-const SyncUserStore = () => {
-  const { data: session } = useSession();
+interface SyncUserStoreProps {
+  session: Session | null;
+}
+
+const SyncUserStore = ({ session }: SyncUserStoreProps) => {
   const { setCurrentUser } = useStore();
 
   useEffect(() => {
-    if (session && session?.user) {
-      setCurrentUser({
-        id: session.user.id as string,
-        name: session.user.name as string,
-        image: session.user.image as string,
-        email: session.user.email as string,
-      });
-    } else {
-      setCurrentUser(null);
-    }
+    (async () => {
+      if (session && session?.user && session.user.id) {
+        const user: User | null = await getCurrentUserById(session.user.id);
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    })();
   }, [session, setCurrentUser]);
 
   return null;

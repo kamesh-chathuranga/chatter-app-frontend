@@ -18,7 +18,7 @@ const ChatPane = () => {
 
       <ResizablePanelGroup direction="horizontal" className="h-full ">
         <ResizablePanel defaultSize={25} minSize={20} maxSize={50}>
-          <div className="flex flex-col h-full px-4 pt-4 gap-y-4">
+          <div className="flex flex-col h-full px-4 gap-y-4">
             <div className="flex flex-col gap-y-3">
               <ChatTopBar />
               <SearchBar />

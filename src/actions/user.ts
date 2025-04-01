@@ -3,15 +3,15 @@
 import { prisma } from "@/lib/prismaClient";
 
 export const getCurrentUserByEmail = async (email: string) => {
-  // try {
+  try {
     const user = prisma.user.findUnique({
       where: { email },
     });
 
     return user;
-  // } catch (error) {
-  //   throw error;
-  // }
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getCurrentUserById = async (id: string) => {
@@ -26,10 +26,18 @@ export const getCurrentUserById = async (id: string) => {
   }
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (userId: string) => {
   try {
     const users = await prisma.user.findMany({
-      orderBy: { name: "asc" },
+      where: {
+        id: { not: userId },
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+      },
     });
 
     return users;

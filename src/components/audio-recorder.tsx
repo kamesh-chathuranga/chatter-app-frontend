@@ -12,7 +12,7 @@ import { FaPlay } from "react-icons/fa";
 import { CiPause1 } from "react-icons/ci";
 import { LuSend } from "react-icons/lu";
 import WaveSurfer from "wavesurfer.js";
-import { useStore } from "@/store/store";
+import { useStore } from "@/store";
 import axios from "axios";
 
 interface AudioRecorderProps {

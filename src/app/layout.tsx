@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
+import { Geist_Mono, Poppins } from "next/font/google";
 import SyncUserStore from "@/components/user-store";
-import "./globals.css";
 import { auth } from "@/auth";
+import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -30,12 +29,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider session={session}>
-          <SyncUserStore />
-          {children}
-        </SessionProvider>
+        <SyncUserStore session={session} />
+        {children}
       </body>
     </html>
   );

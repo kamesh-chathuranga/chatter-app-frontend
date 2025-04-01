@@ -2,7 +2,7 @@
 
 import { calculateTime } from "@/lib/calculateTime";
 import { cn } from "@/lib/utils";
-import { useStore } from "@/store/store";
+import { useStore } from "@/store";
 import React from "react";
 import MessageStatus from "./message-status";
 

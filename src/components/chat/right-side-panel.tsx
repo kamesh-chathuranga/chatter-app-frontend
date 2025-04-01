@@ -2,7 +2,7 @@
 
 import React, { Fragment } from "react";
 
-import { useStore } from "@/store/store";
+import { useStore } from "@/store";
 import Chat from "./chat";
 import EmptyChat from "./empty-chat";
 
